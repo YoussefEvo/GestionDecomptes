@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+      
+
+    	<ui:composition template="/template/template.xhtml">
+    		<ui:define name="content">
+    		    <h:outputScript>
+                    jQuery(document).ready(function(){
+                        jQuery('li#navigationUtilisateur').addClass("active open");
+                        jQuery('li#navigationUtilisateurUser').addClass("active");
+                    });
+                </h:outputScript>
+	    		<div class="breadcrumbs" id="breadcrumbs">
+					<ul class="breadcrumb">
+						<li>
+							<i class="icon-home home-icon active"></i>
+							<a href="#">#{i18n['message.navigation.accueil']}</a>
+
+						</li>
+					</ul><!--.breadcrumb-->
+				</div>
+				<div class="page-content">
+					<div class="page-header position-relative">
+						<h1>
+							 #{i18n['message.navigation.utilisateur']}
+							<small>
+								<i class="icon-double-angle-right"></i>
+						 	 #{i18n['message.navigation.utilisateur.utilisateur']}
+							</small>
+						</h1>
+					</div><!--/.page-header-->
+				
+				
+				
+				
+                    <div class="row-fluid">
+                        <div class="span12">
+                        <p:messages id="messages" showDetail="true" closable="true" />
+                        
+                        <h:form id="form">
+		                        <p:dataTable var="user" id="userTable" 
+		                        			 value="#{utilisateurController.users}"
+		                        			 paginator="true" rows="#{i18n['message.utilisateur.datatable.row.nb']}" >
+								    <p:column headerText="#{i18n['message.utilisateur.nom']}"
+								    		  sortBy="#{user.username}" >
+								        <h:outputText value="#{user.username}" />
+								    </p:column>
+								 
+								    <p:column headerText="#{i18n['message.utilisateur.profil']}"
+								    		  sortBy="#{user.profil.codProfil}">
+								        <h:outputText value="#{user.profil.codProfil}" />
+								    </p:column>
+								 
+								    <p:column headerText="#{i18n['message.utilisateur.email']}"
+								    		  sortBy="#{user.email}">
+								        <h:outputText value="#{user.email}" />
+								    </p:column>
+								    
+								    <p:column headerText="#{i18n['message.utilisateur.date.creat']}"
+								    		  sortBy="#{user.datCreat}">
+								        <h:outputText value="#{user.datCreat}"  >
+								         		<f:convertDateTime pattern="dd.MM.yyyy" />
+								        </h:outputText>
+								    </p:column>
+								    <p:column width="100">
+				            				<p:commandLink class="red" update=":form:userDetail" oncomplete="PF('userDialog').show()" icon="ui-icon-search" title="View" >
+				            				<f:setPropertyActionListener value="#{user}" target="#{utilisateurController.selectedUser}" />
+				            				<i class="icon-zoom-in bigger-130"></i>
+				            				</p:commandLink>
+				            				
+				            				<p:commandLink class="red" update=":form2:userModifDetail" oncomplete="PF('userModifDialog').show()" 
+				            							   icon="ui-icon-search" title="View"
+				            							   action="#{utilisateurController.listnerEditUser}" >
+				            				<f:setPropertyActionListener value="#{user}" target="#{utilisateurController.selectedUser}" />
+				            				<i class="icon-pencil bigger-130"></i>
+				            				</p:commandLink>
+				            				
+				            				<p:commandLink class="red" action="#{utilisateurController.supprimer}" update=":form:userTable" >
+					            				<i class="icon-trash bigger-130"/>
+												<p:confirm header="#{i18n['message.confirmation']}" 
+														   message="#{i18n['message.utilisateur.user.delete.confirm']} ?" 
+														   icon="ui-icon-alert" />
+											<f:setPropertyActionListener value="#{user}" target="#{utilisateurController.selectedUser}" />
+				            				</p:commandLink>
+											
+								    </p:column>
+								</p:dataTable>
+								
+								<div class="form-actions">
+										<h:panelGrid columns="2" >
+											<p:commandLink  styleClass="btn btn-primary"
+															oncomplete="PF('userModifDialog').show()"
+															action="#{utilisateurController.ajouter}"
+															update=":form2:userModifDetail" >
+											#{i18n['btn.ajouter']}
+											</p:commandLink>										
+										</h:panelGrid>
+								</div>		
+
+								    <p:dialog header="Détail Utilisateur" widgetVar="userDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false" >
+								        <p:outputPanel id="userDetail" style="text-align:center;">
+											<span class="profile-picture">
+												
+												<h:graphicImage name="img/user.png" alt="Marsa maroc" />
+											</span>
+										        <div class="space-4"></div>
+												<div class="width-80 label label-info label-large arrowed-in arrowed-in-right">
+													<div class="inline position-relative">
+														<span class="white middle bigger-120">
+															#{utilisateurController.selectedUser.username}
+														</span>
+													</div>
+												</div>
+										        <div class="space-4"></div>
+										        <div class="profile-user-info profile-user-info-striped">	
+													<div class="profile-info-row">
+														<div class="profile-info-name">#{i18n['message.utilisateur.profil']}</div>
+														<div class="profile-info-value">
+															<span >&nbsp;#{utilisateurController.selectedUser.profil.libProfil}</span>
+														</div>
+													</div>
+													<div class="profile-info-row">
+														<div class="profile-info-name">#{i18n['message.utilisateur.email']}</div>
+														<div class="profile-info-value">
+															<span >&nbsp;#{utilisateurController.selectedUser.email}</span>
+														</div>
+													</div>
+													<div class="profile-info-row">
+														<div class="profile-info-name">#{i18n['message.utilisateur.user.creat']}</div>
+														<div class="profile-info-value">
+															<span >&nbsp;#{utilisateurController.selectedUser.userCreat}</span>
+														</div>
+													</div>
+													<div class="profile-info-row">
+														<div class="profile-info-name">#{i18n['message.utilisateur.date.creat']}</div>
+														<div class="profile-info-value">
+															<span >
+															&nbsp;
+															<h:outputText value="#{utilisateurController.selectedUser.datCreat}"  >
+													         		<f:convertDateTime pattern="dd.MM.yyyy HH:mm" />
+													        </h:outputText>
+															</span>
+														</div>
+													</div>
+													<div class="profile-info-row">
+														<div class="profile-info-name">#{i18n['message.utilisateur.user.modif']}</div>
+														<div class="profile-info-value">
+															<span >&nbsp;#{utilisateurController.selectedUser.userModif}</span>
+														</div>
+													</div>
+													<div class="profile-info-row">
+														<div class="profile-info-name">#{i18n['message.utilisateur.date.modif']}</div>
+														<div class="profile-info-value">
+															<span >&nbsp;
+															<h:outputText value="#{utilisateurController.selectedUser.datModif}"  >
+													         		<f:convertDateTime pattern="dd.MM.yyyy HH:mm" />
+													        </h:outputText>
+															</span>
+														</div>
+													</div>
+												</div>
+								        </p:outputPanel>
+								    </p:dialog>
+								      
+         </h:form>            
+         <br/>
+         <br/>
+         <h:form id="form2">
+
+		   <p:dialog header="Modifier Utilisateur" widgetVar="userModifDialog"
+    			  modal="true" showEffect="fade" hideEffect="fade" resizable="false" >
+            <p:outputPanel id="userModifDetail" style="display:block">
+            	  
+         	<div class="widget-box">
+					<div class="widget-header">
+						<h4> #{i18n['message.navigation.utilisateur']} : </h4>
+						<span class="widget-toolbar">
+							<p:commandLink action="#{utilisateurController.annuler}" class="green" 
+										   update=":form2:userModifDetail" process="@this" >
+							<i class="icon-refresh"></i></p:commandLink>
+						</span>
+					</div>
+					<div class="widget-body">
+							<div class="widget-body-inner" style="display: block;">
+										<div class="widget-main">
+											<div class="row-fluid">
+												<p:outputLabel for="nom" value="#{i18n['message.utilisateur.nom']} :" />
+												
+													<p:inputText id="nom" style="input-medium" size="35" required="true"
+																 value="#{utilisateurController.selectedUser.username}"
+																 validatorMessage="#{i18n['message.utilisateur.error.nom']}" 
+																 requiredMessage="#{i18n['message.utilisateur.error.nom.required']}"
+																 validator="#{utilisateurController.validateUser}">
+													<f:validateLength minimum="#{i18n['message.utilisateur.nom.length.min']}"
+																	  maximum="#{i18n['message.utilisateur.nom.length.max']}"  />
+																	  
+													<p:ajax event="blur" update=":form2:msgNom"	
+															onstart="activeLoading()" oncomplete="desactiveLoading()" />															  
+	                								<p:clientValidator   />			 
+													</p:inputText>
+	        										<p:message id="msgNom" for="nom"/>
+											</div>
+            						
+											<div class="row-fluid">
+													<p:outputLabel for="email" value="#{i18n['message.utilisateur.email']} :" />
+													<p:inputText id="email" size="35" required="true"
+																 value="#{utilisateurController.selectedUser.email}"
+																 validatorMessage="#{i18n['message.utilisateur.email.error']}"
+																 requiredMessage="#{i18n['message.utilisateur.error.mail.required']}" >
+													 <f:validateRegex pattern="[\w\.-]*[a-zA-Z0-9_]@[\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]" />
+													 <p:clientValidator />
+													 </p:inputText>
+													 <p:message for="email" />
+											</div>
+											<div class="row-fluid">
+													<p:outputLabel for="password" value="#{i18n['message.utilisateur.user.password']} :" />
+													<p:password id="password" placeholder="#{utilisateurController.selectedUser.idUser ne -1? i18n['message.utilisateur.user.new.password.dialect.star'] : ''}" size="35"
+																value="#{utilisateurController.selectedUser.pwd}" feedback="true" 
+																required="#{utilisateurController.selectedUser.idUser eq -1? 'true' : 'false'}"
+																validatorMessage="#{i18n['message.utilisateur.error.password']}"
+																requiredMessage="#{i18n['message.utilisateur.error.password.required']}"
+                    											promptLabel="#{i18n['message.utilisateur.user.new.password.dialect']}"
+                    											weakLabel="#{i18n['message.utilisateur.user.password.weak']}"
+                    											goodLabel="#{i18n['message.utilisateur.user.password.good']}"
+                    											strongLabel="#{i18n['message.utilisateur.user.password.strong']}" >
+                    								<f:validateLength minimum="#{i18n['message.utilisateur.user.password.length.min']}"
+																	  maximum="#{i18n['message.utilisateur.user.password.length.max']}" />
+													<p:clientValidator />			
+          											</p:password>
+          											<p:message for="password" />
+
+																 
+											</div>
+											<div class="row-fluid">
+												<p:outputLabel for="profil" value="#{i18n['message.utilisateur.profil']} :" />
+												<div class="input-append">
+													 <p:selectOneMenu id="profil" value="#{utilisateurController.selectedUser.profil.idProfil}" style="width:240px">
+													    <f:selectItem itemLabel="#{i18n['message.choix.profil.select']}" itemValue="" noSelectionOption="true" />
+													    <f:selectItems value="#{utilisateurController.listeProfil}" var="p" itemLabel="#{p.libProfil}" itemValue="#{p.idProfil}" />
+													 </p:selectOneMenu>
+												</div>
+											</div>
+
+										</div>
+									</div>
+									<div class="widget-header">
+											<div class="row-fluid">
+												<p:commandButton value="Valider" class="btn btn-small btn-primary"  update=":form:userTable,messages"
+																 oncomplete="PF('userModifDialog').hide()" 
+																 validateClient="true" 
+																 action="#{utilisateurController.enregistrer}" >
+
+												<p:confirm header="#{i18n['message.confirmation']}"
+														   message="#{i18n['message.confirmation.message']} ?" 
+														   icon="ui-icon-alert" />
+												</p:commandButton>
+
+												&nbsp;&nbsp;&nbsp;				 
+												<p:commandButton value="Annuler" class="btn btn-small" update=":form:userTable"
+												 				action="#{utilisateurController.annuler}" process="@this"
+																 oncomplete="PF('userModifDialog').hide()" />
+											</div>
+				
+									</div>
+							</div>
+				</div>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade" visible="false">
+        			<p:commandButton value="#{i18n['message.oui']}" type="button"
+        							 styleClass="ui-confirmdialog-yes"
+        			 				 icon="ui-icon-check">
+        			</p:commandButton>
+        			<p:commandButton value="#{i18n['message.non']}" type="button"
+        							 styleClass="ui-confirmdialog-no" 
+        							 icon="ui-icon-close" />
+    			</p:confirmDialog>
+				
+			</p:outputPanel>
+  			</p:dialog>
+                        </h:form>
+
+						<!--PAGE CONTENT ENDS-->
+						</div><!--/.span-->
+					</div><!--/.row-fluid-->
+				</div><!--/.page-content-->
+			</ui:define>
+    	</ui:composition>
+
+</html>

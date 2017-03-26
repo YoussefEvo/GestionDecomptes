@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+    <body>
+	    <ui:composition>
+
+			<div class="navbar"><!--Header-->
+				<div class="navbar-inner">
+					<div class="container-fluid">
+						<div class="brand" style="width: 200px">
+							<div style="float: left;">
+								<small>
+									<h:graphicImage style="height: 23px" name="img/icon-mm.png" alt="Marsa maroc" />
+								</small>
+							</div>
+							<div style="margin-top: 1px; font-size: 27px;">
+								<small style="margin-left: 7px"> #{i18n['marsa.maroc']} </small>
+							</div>
+						</div>
+						
+						<ul class="nav ace-nav pull-right">
+							<li class="light-red">
+								<a data-toggle="dropdown" href="#" class="dropdown-toggle">
+									<h:graphicImage class="nav-user-photo" name="avatars/avatar2.png" alt="Jason's Photo" />
+									<span class="user-info">
+										<strong> <small style="text-align: center">#{i18n['message.bienvenue']}</small></strong> 
+											<strong> <small style="text-align: center;color: #E0E0E0">#{userName}</small></strong>
+									</span>
+	
+									<i class="icon-caret-down"></i>
+								</a>
+	
+								<ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-closer">
+									<li>
+										<a href="#">
+											<i class="icon-user"></i>
+											#{i18n['message.label.mon.compte']}
+										</a>
+									</li>
+									<li>
+										<h:outputLink value="#{request.contextPath}/j_spring_security_logout">
+											<i class="icon-off"></i>
+											#{i18n['message.label.quitter']}
+										</h:outputLink>
+										
+									</li>
+								</ul>
+							</li>
+						</ul><!--/.ace-nav-->
+					</div><!--/.container-fluid-->
+				</div><!--/.navbar-inner-->
+			</div><!--/.header-->
+
+	    </ui:composition>
+    </body>
+</html>

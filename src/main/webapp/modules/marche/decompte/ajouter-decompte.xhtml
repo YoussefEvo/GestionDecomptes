@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+      
+    	<ui:composition template="/template/template.xhtml">
+    		<ui:define name="content">
+    			<h:outputScript>
+    				jQuery(document).ready(function(){
+    					jQuery('li#navigationMarche').addClass("active open");
+    					jQuery('li#navigationMarcheDecompte').addClass("active");
+    				});
+				</h:outputScript>
+				<div class="page-content">
+					<div class="page-header position-relative">
+						<h:panelGrid columns="2">
+							<h:form>
+									<p:commandLink id="btnValid"  styleClass="btn btn-small btn-info"
+												   onclick="activeLoading();" oncomplete="desactiveLoading();"
+												   action="#{decompteController.startConsulterDecomptes}">
+										<i class="icon-reply  icon-on-right bigger-110"></i>
+										 
+								</p:commandLink>
+							</h:form>					
+							<h1>
+								#{i18n['message.navigation.marche']}
+								<small>
+								<i class="icon-double-angle-right"></i>
+							 	#{i18n['message.navigation.decompte.ajouter']}
+								</small>
+							</h1>
+						</h:panelGrid>						
+					</div><!--/.page-header-->
+                    <div class="row-fluid">
+                        <div class="span12">
+                        <p:messages id="messages" showDetail="true" closable="true" />
+							<h:form id="formDecompte">
+								<div class="ui-g" >
+									<div class="ui-g-3" style="width: 300px;">
+											<p:outputLabel for="numMarche" value="#{i18n['label.marche.numero']} :" />
+											<p:inputText id="numMarche"  readonly="true"
+														 value="#{decompteController.selectedMarche.numMarche}"/>
+									<br /><br /><br />
+										 <h:panelGrid columns="4" style="margin-bottom:10px" cellpadding="5">
+								        	<p:selectBooleanCheckbox value="#{decompteController.decompte.ddPartiel}" >
+								        		<p:ajax update="ddGCheckbox"/>
+								        	</p:selectBooleanCheckbox>
+								     		<h:outputText value="#{i18n['label.decompte.definitif.partiel.code']}" />
+								       	 	
+								        	<p:selectBooleanCheckbox value="#{decompteController.decompte.ddGlobal}" id="ddGCheckbox"
+								        							 disabled="#{!decompteController.decompte.ddPartiel}"	 />
+								        	<h:outputText value="#{i18n['label.decompte.definitif.global.code']}" />
+								        </h:panelGrid>
+									<br />
+									<sec:authorize ifAnyGranted="ROLE_MARCHE_DECOMPTE_ADD">
+										<h:panelGrid columns="2">
+											<p:commandLink id="btnValid"  styleClass="btn btn-small btn-success"  type="button" 
+														   validateClient="true" ajax="true"
+														   action="#{decompteController.ajouterDecompte}"
+														   disabled="#{fn:length(decompteController.listSelectedAttachements) le 0}" >
+												<i class="icon-ok bigger-110"></i>
+												 #{i18n['btn.enregistrer']}
+											<p:confirm header="#{i18n['message.confirmation']}" message="#{i18n['message.confirmation.decompte.ajouter']} ?" icon="ui-icon-alert" />
+											</p:commandLink>											
+										</h:panelGrid>
+									</sec:authorize>
+									</div>
+									<div class="ui-g-3" style="width: 300px;">
+											<p:outputLabel for="fournisseur" value="#{i18n['label.marche.fournisseur']} :" />
+											<p:inputText id="fournisseur" value="#{decompteController.selectedMarche.libFournisseur}"  readonly="true"/>
+									<br /><br />
+											<p:outputLabel for="dateEtablisement" value="#{i18n['label.date.etablile']} :" />
+											 <p:calendar id="dateEtablisement" required="true"
+											 			 pattern="dd-MM-yyyy" mask="true" locale="fr"
+											 			 value="#{decompteController.decompte.dateEtablissement}"
+											 			 requiredMessage="#{i18n['message.decompte.error.date.etablissement.required']}">
+											 <p:clientValidator />
+											 </p:calendar>
+											 <p:message for="dateEtablisement"/>
+									</div>
+									
+									<div class="ui-g-3" style="border-left: 3px dotted red;width: 300px;">
+										<h:panelGrid columns="2">
+											<p:outputLabel for="retenuGrantie" value="#{i18n['label.decompte.retenu.grantie']} :" />
+											<p:inputNumber id="retenuGrantie" size="10" style="height: 13px"
+														   value="#{decompteController.decompte.retenuGarantie}">
+											</p:inputNumber>
+											
+											<p:outputLabel for="penaliteRetard" value="#{i18n['label.decompte.penalite.retard']} :" />
+											<p:inputNumber id="penaliteRetard" size="10" style="height: 13px"
+														   value="#{decompteController.decompte.penaliteRetard}">
+											</p:inputNumber> 
+											
+											<p:outputLabel for="retenuAvance" value="#{i18n['label.decompte.retenu.avance']} :" />
+											<p:inputNumber id="retenuAvance" size="10" style="height: 13px"
+														   value="#{decompteController.decompte.retenuAvance}" >
+											</p:inputNumber>
+											
+											<p:outputLabel for="revisionPrix" value="#{i18n['label.decompte.revision.prix']} :" />
+											<p:inputNumber id="revisionPrix" size="10" style="height: 13px"
+														   value="#{decompteController.decompte.revisionPrix}">
+											</p:inputNumber>
+											
+											<p:outputLabel for="retenuAutre" value="#{i18n['label.decompte.retenu.autre']} :" />
+											<p:inputNumber id="retenuAutre" size="10" style="height: 13px"
+														   value="#{decompteController.decompte.autresRetenues}">
+											</p:inputNumber>
+											
+											<p:outputLabel for="retenuSource" value="#{i18n['label.decompte.retenu.source']} :" />
+											<p:inputNumber id="retenuSource" size="10" style="height: 13px"
+														   value="#{decompteController.decompte.retenueSource}">
+											</p:inputNumber>
+																																													
+										</h:panelGrid>
+									</div>
+								</div>							
+								<hr />
+								<div class="fixedTable" >
+										<p:dataTable id="tabMarche" emptyMessage="#{i18n['table.liste.vide']}"
+													 var="attach" rowKey="#{attach.idAttachement}" 
+													 selection="#{decompteController.listSelectedAttachements}"
+													 value="#{decompteController.listAttachements}" >
+											      <p:ajax event="rowSelectCheckbox" update="formDecompte:btnValid" />
+												  <p:ajax event="rowUnselectCheckbox" update="formDecompte:btnValid" />
+  												  <p:ajax event="toggleSelect" update="formDecompte:btnValid" />
+  												  
+											<p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+											
+				    						<p:column headerText="#{i18n['label.attach.numero']}">
+				        						<h:outputText value="#{attach.numAttachement}" />
+				    						</p:column>
+				
+											<p:column headerText="#{i18n['label.date.du']}">
+			        							<h:outputText value="#{attach.dateDebut}" >
+			        								<f:convertDateTime pattern="dd/MM/yyyy" />
+			        							</h:outputText>
+			    							</p:column>
+			    							
+											<p:column headerText="#{i18n['label.date.au']}">
+			        							<h:outputText value="#{attach.dateFin}" >
+			        								<f:convertDateTime pattern="dd/MM/yyyy" />
+			        							</h:outputText>
+			    							</p:column>
+			    							
+											<p:column headerText="#{i18n['label.marche.montant']}">
+			        							<h:outputText value="#{attach.montant}" >
+			        								<f:convertNumber type="number" minFractionDigits="2" maxFractionDigits="2"/>
+			        							</h:outputText>
+			    							</p:column>
+			    								    																    										    										    										    										    										    										    							
+										</p:dataTable>
+								</div>	  
+										<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+						        			<p:commandButton value="#{i18n['message.oui']}" type="button" 
+						        							 styleClass="ui-confirmdialog-yes"
+						        							 validateClient="true"
+						        			 				 icon="ui-icon-check">
+						        			</p:commandButton>
+						        			<p:commandButton value="#{i18n['message.non']}" type="button"
+						        							 styleClass="ui-confirmdialog-no"
+						        							 icon="ui-icon-close" />
+						    			</p:confirmDialog>
+							</h:form>
+						<!--PAGE CONTENT ENDS-->
+						</div><!--/.span-->
+					</div><!--/.row-fluid-->
+			   	</div><!--/.page-content-->
+			</ui:define>
+    	</ui:composition>
+
+</html>

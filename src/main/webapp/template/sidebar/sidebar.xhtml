@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+    <body>
+    	<ui:composition>
+		    <div class="sidebar" id="sidebar">
+		    	<h:form>
+					<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+						<div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+							<button class="btn btn-small btn-success">
+								<i class="icon-group"></i>
+							</button>
+		
+							<button class="btn btn-small btn-info">
+								<i class="icon-briefcase"></i>
+							</button>
+		
+							<button class="btn btn-small btn-warning">
+								<i class="icon-cogs"></i>
+							</button>
+		
+							<button class="btn btn-small btn-danger">
+								<i class="icon-tags"></i>
+							</button>
+						</div>
+						<div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+							<span class="btn btn-success"></span>
+							<span class="btn btn-info"></span>
+							<span class="btn btn-warning"></span>
+							<span class="btn btn-danger"></span>
+						</div>
+					</div><!--#sidebar-shortcuts-->
+		
+					<ul class="nav nav-list">
+						<li>
+							<h:outputLink value="#{request.contextPath}/accueil.xhtml">
+								<i class="icon-home home-icon"></i>
+								<span class="menu-text"> #{i18n['message.navigation.accueil']} </span>
+							</h:outputLink>
+						</li>
+		
+						
+						<sec:authorize ifAnyGranted="ROLE_UTILISATEUR">
+						<li id="navigationUtilisateur">
+		                       <!--<li class="active open">
+							<a href="#" class="dropdown-toggle">-->
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-group"></i>
+								<span class="menu-text"> #{i18n['message.navigation.utilisateur']} </span>
+		
+								<b class="arrow icon-angle-down"></b>
+							</a>
+		
+							<ul class="submenu">
+								<sec:authorize ifAnyGranted="ROLE_UTILISATEUR_ROLE_SEARCH">
+									<li id="navigationUtilisateurRole">
+										<a href="">
+											<i class="icon-double-angle-right"></i>
+											#{i18n['message.navigation.utilisateur.role']}
+										</a>
+									</li>
+								</sec:authorize>
+								<sec:authorize ifAnyGranted="ROLE_UTILISATEUR_PROFIL_SEARCH">
+									<li id="navigationUtilisateurProfil">
+										<a href="">
+											<i class="icon-double-angle-right"></i>
+											#{i18n['message.navigation.utilisateur.profil']}
+										</a>
+									</li>
+								</sec:authorize>
+								<sec:authorize ifAnyGranted="ROLE_UTILISATEUR_USER_SEARCH">
+								<li id="navigationUtilisateurUser">
+									<h:commandLink action="#{utilisateurController.start}" onclick="activeLoading()" >
+										<i class="icon-double-angle-right"></i>
+										#{i18n['message.navigation.utilisateur.utilisateur']}
+									</h:commandLink>
+								</li>
+								</sec:authorize>
+							</ul>
+						</li>
+						</sec:authorize>
+						
+						<li id="navigationAttachement">
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-briefcase"></i>
+								<span class="menu-text"> #{i18n['message.navigation.attachement']} </span>
+								<b class="arrow icon-angle-down"></b>
+							</a>
+		
+							<ul class="submenu">
+<!-- 								<sec:authorize ifAnyGranted="ROLE_MARCHE_ATTACHEMENT"> -->
+									<li id="navigationAttachementMarche">
+										<h:commandLink action="#{attachementController.searchListMarche}" onclick="activeLoading()" >
+											<i class="icon-double-angle-right"></i>
+											#{i18n['message.navigation.attachement.marche']}
+										</h:commandLink>
+									</li>
+<!-- 								</sec:authorize> -->
+<!-- 								<sec:authorize ifAnyGranted="ROLE_MARCHE_DECOMPTE"> -->
+									<li id="navigationAttachementBonCommande">
+										<h:commandLink action="#{attachementBnCmdController.searchListBonCmd}" onclick="activeLoading()" >
+											<i class="icon-double-angle-right"></i>
+											#{i18n['message.navigation.attachement.bn.cmd']}
+										</h:commandLink>
+									</li>								
+<!-- 								</sec:authorize> -->
+							</ul>
+						</li>
+						
+						
+						<li id="navigationMarche">
+		                       <!--<li class="active open">
+							<a href="#" class="dropdown-toggle">-->
+							<a href="#" class="dropdown-toggle">
+								<i class="icon-folder-open-alt"></i>
+								<span class="menu-text"> #{i18n['message.navigation.decompte']} </span>
+		
+								<b class="arrow icon-angle-down"></b>
+							</a>
+		
+							<ul class="submenu">
+								<sec:authorize ifAnyGranted="ROLE_MARCHE_DECOMPTE">
+									<li id="navigationMarcheDecompte">
+										<h:commandLink action="#{decompteController.start}" onclick="activeLoading()" >
+											<i class="icon-double-angle-right"></i>
+											#{i18n['message.navigation.marche.decompte']}
+										</h:commandLink>
+									</li>								
+								</sec:authorize>
+							</ul>
+						</li>
+						
+						
+						
+						
+					</ul><!--/.nav-list-->
+		
+					<div class="sidebar-collapse" id="sidebar-collapse">
+						<i class="icon-double-angle-left"></i>
+					</div>
+				</h:form>
+			</div>	
+		</ui:composition>
+	</body>		
+</html>    

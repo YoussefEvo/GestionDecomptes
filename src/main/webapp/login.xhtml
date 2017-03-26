@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+		<meta charset="utf-8" />
+		<title> #{i18n['message.appli.title']}</title>
+    	<link rel="shortcut icon" href="#{request.contextPath}/resources/img/icon-mm.png" />
+		<meta name="description" content="Gestion Decomptes" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<meta name="description" content="Common Buttons &amp; Icons" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<h:outputStylesheet library="css" name="/loginStyle.css" />
+</h:head>
+<h:body onload="noBack();" onpageshow="if (event.persisted) noBack();" onunload="">
+	<div id="header">
+		<div class="navbar">
+			<div class="navbar-inner"></div>
+		</div>
+	</div>
+
+	<div class="container" style="max-width: 359px;">
+		<div class="info">
+			<div style="background-color: #FFFFFF;width: 360px;padding-top: 13px;padding-bottom: 1px">
+				<h1 style="font-size: 28px; color: #575759 ">#{i18n['message.appli.titre']}</h1>
+			</div>
+		</div>
+	</div>
+	<div class="form">
+			<span> 
+				<h:graphicImage class="imgMarsaMaroc" name="img/logo-MM.png" alt="Marsa Maroc" />
+			</span>
+		<form action="#{request.contextPath}/j_spring_security_check" method="post">
+			<input type="text" placeholder="#{i18n['message.utilisateur.nom']}" name="j_username"  required="required"  value="#{sessionScope.SPRING_SECURITY_LAST_USERNAME}"/>
+			<input type="password" placeholder="#{i18n['message.utilisateur.user.password']}" name="j_password"  required="required"/>
+<!-- 			<div> -->
+<!-- 				<input type="checkbox" name="_spring_security_remember_me" style="width: 5px;margin-left: -169px;"/>  -->
+<!-- 				<label for="loginkeeping" style="font-size: 14px;color: #575759"> #{i18n['message.utilisateur.reste.connecte']}</label> -->
+<!-- 			</div> -->
+			<button type="submit">#{i18n['message.login']}</button>
+			<c:if test="#{param.state=='failure'}">
+				<label style="color:#FF0000;text-align:left">#{i18n['message.conn.echec']}</label>
+			</c:if>	
+		</form>
+		<!--scripts -->
+		<!--Jquery primefaces -->
+		<h:outputScript library="primefaces" name="jquery/jquery.js" target="head"/>
+		<!--Utilitaires -->
+		<h:outputScript library="js" name="/utilitaires.js" />
+	</div>
+	 <div class="progress_modal"></div>
+</h:body>
+</html>

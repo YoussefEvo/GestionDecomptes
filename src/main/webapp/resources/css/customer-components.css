@@ -1,0 +1,106 @@
+.ui-messages-info, .ui-message-info {
+	color: #468847;
+	background-color: #dff0d8;
+	border-color: #d6e9c6;
+}
+
+.ui-messages-info-icon {
+	background-position: -288px 0;
+}
+
+.Parentline {
+	background-color: #307ecc !important;
+	background-image: none !important;
+	color: #000000 !important;
+}
+
+.ui-widget {
+	font-size: 1em;
+}
+
+.ui-paginator .ui-paginator-page, .ui-paginator .ui-paginator-pages, .ui-paginator .ui-paginator-next, .ui-paginator .ui-paginator-last, .ui-paginator .ui-paginator-first, .ui-paginator .ui-paginator-prev, .ui-paginator .ui-paginator-current {
+	padding: 0px 5px;
+}
+
+select {
+	height: 20px;
+	padding: 2px 3px;
+}
+
+.ui-corner-all {
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.ui-corner-left {
+    -moz-border-radius-topleft: 4px;
+    -webkit-border-top-left-radius: 4px;
+    border-top-left-radius: 4px;
+    -moz-border-radius-bottomleft: 4px;
+    -webkit-border-bottom-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.ui-state-error
+	{
+	border: 1px solid #cd0a0a;
+	background: #ffffff;
+	color: #CB2926;
+}
+.ui-outputlabel-rfi{
+	color: #CB2926;
+}
+
+.fixedTableAttachement{
+	width:997px;
+}
+.fixedTableMarche{
+	width:1048px;
+}
+.fixedTableMarcheDecompte{
+	width:900px;
+	font-size:12px;
+}
+.fixedTableDecomptes{
+	width:900px;
+	font-size:12px;
+}
+.fixedTableBonRecep{
+	width:1154px;
+}
+.fixedTableBonCmd{
+	width:620px
+}
+
+@media only screen and (max-width:1367px) {
+	.fixedTableBonRecep{
+		width: 100%;
+	}
+}
+@media only screen and (max-width:1107px) {
+	.fixedTableMarcheDecompte{
+		width: 100%;
+	}
+}
+@media only screen and (max-width:1113px) {
+	.fixedTableDecomptes{
+		width: 100%;
+	}
+}
+@media only screen and (max-width:1284px) {
+	.fixedTableMarche{
+		width: 100%;
+	}
+}
+@media only screen and (max-width:1230px) {
+	.fixedTableAttachement{
+		width: 100%;
+	}
+}
+
+@media only screen and (max-width:908px) {
+	.page-content{
+		width:890px;
+	}
+}

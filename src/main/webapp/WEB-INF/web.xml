@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="GestionDecomptes_ID" version="2.5" metadata-complete="true">
+
+  <display-name>Gestion Decomptes</display-name>
+  
+  
+    <!-- ************************* spring Config ******************************* -->
+    
+    <!-- La servlet ContextLoaderServlet, démarrée au lancement de la webapp pour charger les fichiers de configuration de l'application web
+	     Par defaul il charge le fichier de configuration des beans WEB-INF/applicationContext.xml -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
+    <listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
+	
+	
+	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>webapp.root.gestion</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>spring.profiles.active</param-name>
+		<param-value>dev</param-value>
+	</context-param>
+	<context-param>
+		<param-name>spring.profiles.default</param-name>
+		<param-value>dev</param-value>
+	</context-param>
+	<context-param>
+		<param-name>spring.liveBeansView.mbeanDomain</param-name>
+		<param-value>dev</param-value>
+	</context-param>  
+	
+    <!--identifier le(s) fichier(s) de configuration des beans à charger au démarrage de l’application web -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+        	/WEB-INF/applicationContext.xml, 
+			<!--/WEB-INF/spring-beans.xml,-->
+        	/WEB-INF/spring-security.xml
+        </param-value>
+    </context-param>
+    
+    
+  <!-- ************************* JSF Config ******************************* -->
+  
+  <!--Servlet principale (le contrôleur) -->
+  <servlet>
+        <servlet-name>JSF Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>JSF Servlet</servlet-name>
+        <url-pattern>*.xhtml</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>JSF Servlet</servlet-name>
+        <url-pattern>*.jsf</url-pattern>
+    </servlet-mapping>
+    
+	<!--Changer à "Production" lorsque vous êtes prêt à déployer -->
+	<context-param>
+	   <param-name>javax.faces.PROJECT_STAGE</param-name>
+	   <param-value>Development</param-value>
+	 </context-param>
+	  
+	<!--themes : redmond, home, cupertino, afterdark, blitzer -->
+	 <context-param>
+	    <param-name>primefaces.THEME</param-name>
+	    <param-value>blitzer</param-value>
+	</context-param> 
+	
+	<!-- JSF/SPRING-SECURITY : TAGLIB  -->
+	<context-param>
+		<param-name>javax.faces.FACELETS_LIBRARIES</param-name>
+		<param-value>/WEB-INF/spring-security.taglib.xml</param-value>
+	</context-param>
+	
+	<!-- Enable the client side validation  -->
+	<context-param>
+    <param-name>primefaces.CLIENT_SIDE_VALIDATION</param-name>
+    <param-value>true</param-value>
+	</context-param>
+	
+	<!-- ************************* Filter Config ******************************* -->
+	
+    <!-- Ces filtres vont permettre à spring de re-router l'ensemble des requètes vers ces servlets afin qu'elles y soient analysées.  -->
+	<!-- La classe Spring DelegatingFilterProxy délègue la sécurité à une implémentation
+	   interne ici apellée springSecurityFilterChain, qui est dédiée à la gestion de la sécurité Spring -->
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+	
+	
+	
+    
+
+</web-app>

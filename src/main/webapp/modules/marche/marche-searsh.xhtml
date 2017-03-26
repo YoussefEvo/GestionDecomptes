@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/tags">
+      
+    	<ui:composition template="/template/template.xhtml">
+    		<ui:define name="content">
+    			<h:outputScript>
+    				jQuery(document).ready(function(){
+    					jQuery('li#navigationMarche').addClass("active open");
+    					jQuery('li#navigationMarcheRecherche').addClass("active");
+    				});
+				</h:outputScript>
+				<div class="page-content">
+					<div class="page-header position-relative">
+						<h1>
+							#{i18n['message.navigation.marche']}
+							<small>
+							<i class="icon-double-angle-right"></i>
+						 	#{i18n['message.navigation.marche.recherche']}
+							</small>
+						</h1>
+					</div><!--/.page-header-->
+				
+				
+                    <div class="row-fluid">
+                        <div class="span12">
+                        <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+							<h:form>
+								<div class="ui-g" >
+									<div class="ui-g-3">
+											<p:outputLabel for="marche" value="#{i18n['label.marche.numero']}" />
+											<p:inputText id="marche"/>
+									</div>
+									<div class="ui-g-3">
+											<p:outputLabel for="fournisseur" value="#{i18n['label.marche.fournisseur']} :" />
+											<p:inputText id="fournisseur"/>
+									</div>
+								</div>
+								<div class="ui-g" >
+									<div class="ui-g-3">							
+										<p:commandLink id="btnValid"  styleClass="btn btn-small btn-info"  type="button"
+													   onclick="PF('dlgSav').show();" 
+													   validateClient="false" ajax="true">
+											<i class="icon-search icon-on-right bigger-110"></i>
+											 #{i18n['btn.search']}
+										</p:commandLink>
+									</div>
+								</div>
+								<div class="ui-g">	
+								    <div class="ui-g-9">
+										<p:dataTable id="tabMarche" emptyMessage="#{i18n['table.liste.vide']}"
+												     value="#{marcheController.listMarches}" var="marche"
+												     resizableColumns="true"  >
+											<p:column headerText="#{i18n['label.marche.numero']}">
+				        						<h:outputText value="#{marche.numMarche}" />
+				    						</p:column>
+				    						
+				    						<p:column headerText="#{i18n['label.marche.libelle']}">
+				        						<h:outputText value="#{marche.description}" />
+				    						</p:column>
+				
+											<p:column headerText="#{i18n['label.marche.fournisseur']}">
+			        							<h:outputText value="#{marche.codFournisseur}" />
+			    							</p:column>
+				
+											<p:column headerText="Attachement">
+			        							<button class="btn btn-mini btn-success">
+															<i class="icon-edit bigger-120"></i>
+															Attachement
+														</button>
+			    							</p:column>			    							
+			   
+			   								<p:column headerText="Décompte">
+			        							<button class="btn btn-mini btn-info">
+															<i class="icon-edit bigger-120"></i>
+															Décompte
+														</button>
+			    							</p:column>
+			    							
+			    							
+										</p:dataTable>
+								    </div>
+								</div>
+							</h:form>
+                        
+                        
+						<!--PAGE CONTENT ENDS-->
+						</div><!--/.span-->
+					</div><!--/.row-fluid-->
+			   	</div><!--/.page-content-->
+			</ui:define>
+    	</ui:composition>
+
+</html>

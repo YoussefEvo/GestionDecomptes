@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+      
+    	<ui:composition template="/template/template.xhtml">
+    		<ui:define name="content">
+				<div class="page-content">
+					<div class="page-header position-relative">
+						<h:panelGrid columns="2">
+							<h:form>
+								<h:commandLink id="btnValid"  styleClass="btn btn-small btn-info"
+											   onclick="activeLoading();" oncomplete="desactiveLoading();"
+											   action="#{attachementController.goToConsultAtt}" immediate="true" >
+									<i class="icon-reply  icon-on-right bigger-110"></i>
+								</h:commandLink>
+							</h:form>	
+							<h1>
+								#{i18n['message.navigation.marche']}
+								<small>
+								<i class="icon-double-angle-right"></i>
+							 	#{i18n['message.navigation.attachement.gestion']}
+								</small>
+							</h1>
+						</h:panelGrid>	
+					</div><!--/.page-header-->
+				
+				
+                    <div class="row-fluid">
+                        <div class="span12">
+                        <p:messages id="messages" showSummary="true" autoUpdate="true" closable="true" />
+							<h:form id="form1">
+								<div class="ui-g" >
+									<div class="ui-g-3">
+											<p:outputLabel for="numMarche" value="#{i18n['label.marche.numero']} :" />
+											<p:inputText id="numMarche" value="#{attachementController.selectMarcheDTO.numMarche}" readonly="true" 
+														 required="true" />
+									</div>
+									<div class="ui-g-3">
+											<p:outputLabel for="fournisseur" value="#{i18n['label.marche.fournisseur']} :" />
+											<p:inputText id="fournisseur" value="#{attachementController.selectMarcheDTO.libFournisseur}" readonly="true" 
+														 required="true" />
+									</div>
+									<div class="ui-g-3">
+											<p:outputLabel for="dateEtablissement" value="#{i18n['label.marche.date.etablissement']} :" />
+											<p:calendar id="dateEtablissement" value="#{attachementController.attachementDTO.dateEtablissement}" 
+														pattern="dd/MM/yyyy" mask="true" locale="fr" 
+														required="true" label="#{i18n['label.marche.date.etablissement']}"/>
+									</div>
+									<div class="ui-g-3">
+										<h:panelGrid columns="2" style="margin-top: 16px;">
+											<p:selectBooleanCheckbox id="etDernier" value="#{attachementController.attachementDTO.isDernier}" />
+											<p:outputLabel  value="#{i18n['label.marche.etdernier']} :" />
+										</h:panelGrid>	
+									</div>									
+								</div>
+								<div class="ui-g" >
+									<div class="ui-g-3" style="">
+											<p:outputLabel for="numAttachement" value="#{i18n['label.attach.numero']} :" />
+											<p:inputText id="numAttachement" value="#{attachementController.attachementDTO.numAttachement}" readonly="true" style="margin-right: 10px;"/>
+									</div>
+									<div class="ui-g-3">
+											<p:outputLabel for="dateDebut" value="#{i18n['label.marche.date.debut']} :" />
+											<p:calendar id="dateDebut" value="#{attachementController.attachementDTO.dateDebut}"
+											    binding="#{dateDebut}" pattern="dd/MM/yyyy" mask="true" locale="fr"
+											    required="true">
+											    <p:ajax event="dateSelect" update="@form" listener="#{attachementController.calenderChangeListener}"/>
+											    <f:ajax event="change" update="@form" listener="#{attachementController.calenderChange}"/>
+											</p:calendar>
+
+									</div>
+									<div class="ui-g-3">
+											<p:outputLabel for="dateFin" value="#{i18n['label.marche.date.fin']} :" />
+											<p:calendar id="dateFin" value="#{attachementController.attachementDTO.dateFin}"
+											     pattern="dd/MM/yyyy" mask="true" locale="fr"
+												 required="true">
+											    <f:attribute name="dateDebut" value="#{dateDebut.value}" />
+											    <f:validator validatorId="dateRangeValidator" />
+											    <f:ajax event="change" update="@form" listener="#{attachementController.calenderChange}"/>
+											    <p:ajax event="dateSelect" update="@form" listener="#{attachementController.calenderChangeListener}"/>
+											</p:calendar>
+			
+									</div>
+								</div>
+								<div class="ui-g" >
+									<div class="ui-g-3" >
+										<h:panelGrid columns="2"> 
+											
+											<p:commandLink id="btnRecherche"  styleClass="btn btn-small btn-info"  type="button"
+														   validateClient="false" ajax="true" 
+														   onclick="activeLoading();" oncomplete="desactiveLoading();"
+														   actionListener="#{attachementController.searchBnRecp}"
+														   update="@form" >
+												<i class="icon-search icon-on-right bigger-110"></i>  #{i18n['btn.search']}
+											</p:commandLink>	
+											
+											<p:commandLink id="btnValid"  styleClass="btn btn-small btn-success"  type="button" 
+														   oncomplete="if(!args.validationFailed) PF('dlgSav').show();"
+														   disabled="#{fn:length(attachementController.selectlistBonReceps) le 0}"
+														   validateClient="false" ajax="true" update="form1" >
+												<i class="icon-ok bigger-110"></i>  #{i18n['btn.enregistrer']}
+											</p:commandLink>	
+											
+											
+											<p:confirmDialog message="#{i18n['message.confirmation.enregistrement']}" 
+															 showEffect="fade" hideEffect="fade" header="#{i18n['message.confirmation']}"
+															 widgetVar="dlgSav">	
+													 <h:commandButton styleClass="ui-confirmdialog-yes" icon="ui-icon-check"  value="#{i18n['message.oui']}"
+																	  onclick="PF('dlgSav').hide(); activeLoading();" oncomplete="desactiveLoading();" 
+														              actionListener="#{attachementController.creationAttachementMarche}"
+														              action="#{attachementController.getToSearchAfterAdd}"/>
+													<h:commandButton value="#{i18n['message.non']}"
+														             onclick="PF('dlgSav').hide()" type="button"
+														             icon="ui-icon-close" />
+											</p:confirmDialog>
+												
+										</h:panelGrid>
+									</div>									
+								</div>
+								<hr />
+								
+								<c:if test="#{fn:length(attachementController.listBonReceps) gt 0}">
+									<p:dataTable var="bnRecp" value="#{attachementController.listBonReceps}" rowKey="#{bnRecp.designiationBonReception}" 
+											 paginator="true" rows="7" 
+									         style="font-size:11px; " emptyMessage="#{res['table.liste.vide']}" id="tabBnRecep" rowsPerPageTemplate="#{i18n['datatable.rowsPerPageTemplate']}"
+									         selection="#{attachementController.selectlistBonReceps}" filteredValue="#{attachementController.filteredBonReceps}" >
+									         
+									         <p:ajax event="rowSelectCheckbox" update="form1:btnValid" />
+											 <p:ajax event="rowUnselectCheckbox" update="form1:btnValid" />
+											 <p:ajax event="toggleSelect" update="form1:btnValid" />  
+										
+										<f:facet name="header" >
+											<p:outputLabel style="color: white;font-size: 14px; float: left"> #{i18n['label.list.bon.reception']}</p:outputLabel>
+											<div style="text-align: right;">
+												<p:outputPanel>
+									                <h:outputText value="#{i18n['datatable.recherche']} :" style="font-size: 13px; margin-right:5px" />
+									                <p:inputText id="globalFilter" onkeyup="PF('carsTable').filter()" style="height: 11px; width: 91px;" placeholder="#{i18n['datatable.recherche.placeholder']}"/>
+									            </p:outputPanel>
+											</div> 
+										</f:facet>
+										
+										<p:column selectionMode="multiple" style="width:5px"/>
+										
+			    						<p:column style="text-align:center; width:80px;" headerText="#{i18n['label.marche.br']}" sortBy="#{bnRecp.numBonReception}" filterBy="#{bnRecp.numBonReception} " filterMatchMode="contains" id="numBonReception">  
+											    #{bnRecp.numBonReception} 
+										</p:column>
+										<p:column style="text-align:center; width:50px;" headerText="#{i18n['label.marche.mo']}" sortBy="#{bnRecp.mo}"  id="mo">  
+											    #{bnRecp.mo} 
+										</p:column>
+										<p:column style="text-align:center; width:50px;" headerText="#{i18n['label.marche.ot']}" sortBy="#{bnRecp.ot}"  id="ot">  
+											    #{bnRecp.ot} 
+										</p:column>			
+			    						<p:column style="text-align:center; width:80px;" headerText="#{i18n['label.marche.date.reception']}" sortBy="#{bnRecp.dateReceptionStr}" filterBy="#{bnRecp.dateReceptionStr} " filterMatchMode="contains" id="dateReception">  
+											    #{bnRecp.dateReceptionStr}
+										</p:column>
+										<p:column style="width:200px;" headerText="#{i18n['label.marche.designation']}" sortBy="#{bnRecp.designiationBonReception}" filterBy="#{bnRecp.designiationBonReception} " filterMatchMode="contains" id="designiationBonReception">
+											#{bnRecp.designiationBonReception}
+										</p:column>
+										<p:column style="text-align:center; width:40px;" headerText="#{i18n['label.marche.unite']}" sortBy="#{bnRecp.unite}" id="unite">  
+											    #{bnRecp.unite}
+										</p:column>
+										<p:column style="text-align:right; width:40px;" headerText="#{i18n['label.marche.qte']}" sortBy="#{bnRecp.qteStr}" id="qte">  
+											    #{bnRecp.qteStr}
+										</p:column>
+		    							<p:column style="text-align:right; width:80px;" headerText="#{i18n['label.marche.prix.unitaire']}" sortBy="#{bnRecp.prixUnitaireStr}" id="prixUnitaire">  
+											    #{bnRecp.prixUnitaireStr}
+										</p:column>
+		    							<p:column style="text-align:right; width:80px;" headerText="#{i18n['label.marche.montant']}" sortBy="#{bnRecp.montantStr}" id="montant">  
+											    #{bnRecp.montantStr}
+										</p:column>
+									</p:dataTable>
+								</c:if>
+							</h:form>
+                        
+                        
+						<!--PAGE CONTENT ENDS-->
+						</div><!--/.span-->
+					</div><!--/.row-fluid-->
+			   	</div><!--/.page-content-->
+			   	<h:outputScript>
+    				jQuery(document).ready(function(){
+    					jQuery('li#navigationMarche').addClass("active open");
+    					jQuery('li#navigationMarcheAttachement').addClass("active");
+    				});
+				</h:outputScript>
+			</ui:define>
+    	</ui:composition>
+
+</html>
