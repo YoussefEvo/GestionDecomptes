@@ -8,8 +8,6 @@
   <name>GestionDecomptes Maven Webapp</name>
   <url>http://maven.apache.org</url>
   
-  
-  
   <properties>
 		<jdk.version>1.7</jdk.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
